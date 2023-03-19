@@ -1,12 +1,32 @@
-﻿using System;
+﻿using System.CommandLine;
 
 namespace gitswitch.Cli
 {
     internal class Program
     {
-        static void Main(string[] args)
+        /// <summary>
+        /// The root command: gitsw.
+        /// </summary>
+        private static RootCommand? _rootCommand;
+
+        /// <summary>
+        /// The starting point of the application.
+        /// </summary>
+        /// <param name="args">The commandline arguments.</param>
+        /// <returns>The exit code.</returns>
+        static async Task<int> Main(string[] args)
         {
-            Console.WriteLine("gitswitch");
+            if (!Git.IsExist())
+            {
+                Console.WriteLine("git is not installed on your system.");
+                return 1;
+            }
+
+            // Create root commnand
+            _rootCommand = new RootCommand("A CLI tool to easily switch between users in a repository.");
+
+            // Pass arguments
+            return await _rootCommand.InvokeAsync(args);
         }
     }
 }
