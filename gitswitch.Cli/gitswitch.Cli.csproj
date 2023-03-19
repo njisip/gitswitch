@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Title>gitswitch</Title>
+    <Version>0.1.0</Version>
+    <Authors>gitsw</Authors>
+    <Company />
+    <Product>gitswitch</Product>
+    <PackageId>gitswitch</PackageId>
+    <Description>A CLI tool to easily switch between users in a repository</Description>
+    <PackageProjectUrl>https://github.com/njisip/gitswitch</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/njisip/gitswitch</RepositoryUrl>
+    <PackageTags>git;account-switching;user</PackageTags>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <AssemblyName>gitsw</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
