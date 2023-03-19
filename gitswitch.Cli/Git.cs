@@ -63,5 +63,16 @@ namespace gitswitch.Cli
             }
             return output.Trim();
         }
+
+        /// <summary>
+        /// Checks if git is installed on the machine.
+        /// </summary>
+        /// <returns><see langword="true"/> if git is installed, else <see langword="false"/>.</returns>
+        public static bool IsExist()
+        {
+            if (Start("--version").StartsWith("git version"))
+                return true;
+            return false;
+        }
     }
 }
