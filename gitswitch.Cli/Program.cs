@@ -6,7 +6,7 @@ namespace gitswitch.Cli
 {
     internal class Program
     {
-        private static string _usersPath = "users.json";
+        private static string _usersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "users.json");
 
         /// <summary>
         /// The root command: gitsw.
