@@ -44,6 +44,7 @@ namespace gitswitch.Cli.Commands
         {
             var name = Git.Start(_localNameArguments);
             var email = Git.Start(_localEmailArguments);
+            Console.WriteLine("Local user");
             Util.ShowUser(name, email);
         }
 
@@ -54,6 +55,7 @@ namespace gitswitch.Cli.Commands
         {
             var name = Git.Start(_globalNameArguments);
             var email = Git.Start(_globalEmailArguments);
+            Console.WriteLine("Global user");
             Util.ShowUser(name, email);;
         }
     }
