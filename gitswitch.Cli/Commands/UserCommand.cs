@@ -36,6 +36,9 @@ namespace gitswitch.Cli.Commands
             _allUsersOption.AddAlias("-a");
             AddOption(_allUsersOption);
 
+            // Initialize sub-commands
+            AddCommand(new AddUserCommand());
+
             // Initialize handler
             this.SetHandler((isGlobal, isAllUsers) =>
             {
@@ -83,6 +86,6 @@ namespace gitswitch.Cli.Commands
         {
             foreach (var user in Program.Users?.Values!)
                 Util.ShowUser(user.Name, user.Email, user.Key);
-        }
+        }        
     }
 }

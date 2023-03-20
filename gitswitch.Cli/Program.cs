@@ -49,5 +49,19 @@ namespace gitswitch.Cli
             // Pass arguments
             return await _rootCommand.InvokeAsync(args);
         }
+
+        /// <summary>
+        /// Saves the users collection to a file.
+        /// </summary>
+        internal static void SaveUsers()
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+            var json = JsonSerializer.Serialize(Users, options);
+            File.WriteAllText(_usersPath, json);
+        }
     }
 }
