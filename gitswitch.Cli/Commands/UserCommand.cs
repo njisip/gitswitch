@@ -4,11 +4,6 @@ namespace gitswitch.Cli.Commands
 {
     internal class UserCommand : Command
     {
-        private string _localNameArguments = "config user.name";
-        private string _localEmailArguments = "config user.email";
-        private string _globalNameArguments = "config --global user.name";
-        private string _globalEmailArguments = "config --global user.email";
-
         /// <summary>
         /// Flag to show global user information.
         /// </summary>
@@ -62,8 +57,8 @@ namespace gitswitch.Cli.Commands
         /// </summary>
         private void ShowLocalUser()
         {
-            var name = Git.Start(_localNameArguments);
-            var email = Git.Start(_localEmailArguments);
+            var name = Git.Start(Util.LocalNameArguments);
+            var email = Git.Start(Util.LocalEmailArguments);
             Console.WriteLine("Local user");
             Util.ShowUser(name, email);
         }
@@ -73,8 +68,8 @@ namespace gitswitch.Cli.Commands
         /// </summary>
         private void ShowGlobalUser()
         {
-            var name = Git.Start(_globalNameArguments);
-            var email = Git.Start(_globalEmailArguments);
+            var name = Git.Start(Util.GlobalNameArguments);
+            var email = Git.Start(Util.GlobalEmailArguments);
             Console.WriteLine("Global user");
             Util.ShowUser(name, email);;
         }
