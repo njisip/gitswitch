@@ -2,7 +2,7 @@
 
 namespace gitswitch.Cli
 {
-    public static class Git
+    internal static class Git
     {
         /// <summary>
         /// The git process information.
@@ -28,7 +28,7 @@ namespace gitswitch.Cli
         /// </summary>
         /// <param name="args">The git commands and arguments.</param>
         /// <returns>The command output.</returns>
-        public static string Start(string args = "")
+        internal static string Start(string args = "")
         {
             _info.Arguments = args;
             return StartGit();
@@ -39,7 +39,7 @@ namespace gitswitch.Cli
         /// </summary>
         /// <param name="args">The git commands and arguments.</param>
         /// <returns>The command output.</returns>
-        public static string Start(string[] args)
+        internal static string Start(string[] args)
         {
             _info.Arguments = string.Join(' ', args);
             return StartGit();
@@ -49,7 +49,7 @@ namespace gitswitch.Cli
         /// Starts the git process.
         /// </summary>
         /// <returns>The command output.</returns>
-        static string StartGit()
+       private static string StartGit()
         {
             var output = "";
             using (var process = new Process { StartInfo = _info })
@@ -68,7 +68,7 @@ namespace gitswitch.Cli
         /// Checks if git is installed on the machine.
         /// </summary>
         /// <returns><see langword="true"/> if git is installed, else <see langword="false"/>.</returns>
-        public static bool IsExist()
+        internal static bool IsExist()
         {
             if (Start("--version").StartsWith("git version"))
                 return true;
