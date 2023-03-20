@@ -14,9 +14,9 @@ namespace gitswitch.Cli
         private static RootCommand? _rootCommand;
 
         /// <summary>
-        /// The list of users.
+        /// Gets the collection of users.
         /// </summary>
-        private static Dictionary<string, User>? _users;
+        internal static Dictionary<string, User>? Users { get; private set; }
 
         /// <summary>
         /// The starting point of the application.
@@ -34,7 +34,7 @@ namespace gitswitch.Cli
 
             // Load users
             var json = File.ReadAllText(_usersPath);
-            _users = JsonSerializer.Deserialize<Dictionary<string, User>>(json)!;
+            Users = JsonSerializer.Deserialize<Dictionary<string, User>>(json)!;
 
             // Create root commnand
             _rootCommand = new RootCommand("A CLI tool to easily switch between users in a repository");
