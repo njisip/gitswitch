@@ -29,6 +29,10 @@ namespace gitswitch.Cli
             // Add commands
             _rootCommand.AddCommand(new UserCommand());
 
+            // Show help if no commands or arguments given
+            if (args == null || !args.Any())
+                args = new string[] { "-h" };
+
             // Pass arguments
             return await _rootCommand.InvokeAsync(args);
         }
