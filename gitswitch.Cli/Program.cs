@@ -37,7 +37,7 @@ namespace gitswitch.Cli
             Users = JsonSerializer.Deserialize<Dictionary<string, User>>(json)!;
 
             // Create root commnand
-            _rootCommand = new RootCommand("A CLI tool to easily switch between users in a repository");
+            _rootCommand = new RootCommand("A tool to easily switch between users in a repository");
 
             // Add commands
             _rootCommand.AddCommand(new UserCommand());

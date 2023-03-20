@@ -26,12 +26,12 @@ namespace gitswitch.Cli.Commands
             : base("user", "Show user information")
         {
             // Initialize options
-            _globalOption = new Option<bool>("--global", "Flag to show global user information");
+            _globalOption = new Option<bool>("--global", "Show global user information");
             _globalOption.SetDefaultValue(false);
             _globalOption.AddAlias("-g");
             AddOption(_globalOption);
 
-            _allUsersOption = new Option<bool>("--all", "Flag to show all existing users");
+            _allUsersOption = new Option<bool>("--all", "Show all existing users");
             _allUsersOption.SetDefaultValue(false);
             _allUsersOption.AddAlias("-a");
             AddOption(_allUsersOption);
