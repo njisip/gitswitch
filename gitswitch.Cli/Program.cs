@@ -1,4 +1,5 @@
 ﻿using gitswitch.Cli.Commands;
+using gitswitch.Cli.Services;
 using System.CommandLine;
 using System.Text.Json;
 
@@ -7,6 +8,11 @@ namespace gitswitch.Cli
     internal class Program
     {
         private static string _usersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "users.json");
+
+        /// <summary>
+        /// The git service.
+        /// </summary>
+        private static readonly GitService _git = GitService.Create();
 
         /// <summary>
         /// The root command: gitsw.
@@ -26,7 +32,7 @@ namespace gitswitch.Cli
         static async Task<int> Main(string[] args)
         {
             // Check if git is installed
-            if (!Git.IsExist())
+            if (!_git.IsExist())
             {
                 Console.WriteLine("git is not installed on your system");
                 return 1;
@@ -40,7 +46,7 @@ namespace gitswitch.Cli
             _rootCommand = new RootCommand("A tool to easily switch between users in a repository");
 
             // Add commands
-            _rootCommand.AddCommand(new UserCommand());
+            _rootCommand.AddCommand(new UserCommand(_git));
 
             // Show help if no commands or arguments given
             if (args == null || !args.Any())

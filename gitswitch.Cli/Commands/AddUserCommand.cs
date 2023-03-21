@@ -1,9 +1,15 @@
-﻿using System.CommandLine;
+﻿using gitswitch.Cli.Services;
+using System.CommandLine;
 
 namespace gitswitch.Cli.Commands
 {
     internal class AddUserCommand : Command
     {
+        /// <summary>
+        /// The git service.
+        /// </summary>
+        private readonly GitService _git;
+
         /// <summary>
         /// The key argument.
         /// </summary>
@@ -27,9 +33,11 @@ namespace gitswitch.Cli.Commands
         /// <summary>
         /// Creates a add user command.
         /// </summary>
-        public AddUserCommand()
+        public AddUserCommand(GitService git)
             : base("add", "Add new user")
         {
+            _git = git;
+
             // Initialize arguments
             _keyArg = new Argument<string>("key", "The key used to identify the user");
             _nameArg = new Argument<string>("name", "The user name");
@@ -60,8 +68,8 @@ namespace gitswitch.Cli.Commands
 
                 if (isSwitch)
                 {
-                    Git.Start($"{Util.LocalNameArguments} \"{name}\"");
-                    Git.Start($"{Util.LocalEmailArguments} \"{email}\"");
+                    _git.Start($"{Util.LocalNameArguments} \"{name}\"");
+                    _git.Start($"{Util.LocalEmailArguments} \"{email}\"");
                 }
 
             }, _keyArg, _nameArg, _emailArg, _switchOption);
