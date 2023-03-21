@@ -67,10 +67,7 @@ namespace gitswitch.Cli.Commands
                 Console.WriteLine($"User '{name} ({email})' has been added with key '{key}'");
 
                 if (isSwitch)
-                {
-                    _git.Start($"{Util.LocalNameArguments} \"{name}\"");
-                    _git.Start($"{Util.LocalEmailArguments} \"{email}\"");
-                }
+                    _git.LocalUser = new User(key, name, email);
 
             }, _keyArg, _nameArg, _emailArg, _switchOption);
         }

@@ -14,6 +14,69 @@ namespace gitswitch.Cli.Services
         /// </summary>
         private ProcessStartInfo _info;
 
+        #region Git command arguments
+
+        private readonly string _gitVersionArg = "--version";
+        private readonly string _localNameArg = "config user.name";
+        private readonly string _localEmailArg = "config user.email";
+        private readonly string _globalNameArg = "config --global user.name";
+        private readonly string _globalEmailArg = "config --global user.email";
+
+        #endregion
+
+        /// <summary>
+        /// Gets or sets the local git user.
+        /// </summary>
+        internal User LocalUser
+        {
+            get
+            {
+                return new User
+                {
+                    Name = Run(_localNameArg),
+                    Email = Run(_localEmailArg)
+                };
+            }
+            set
+            {
+                Run($"{_localNameArg} \"{value.Name}\"");
+                Run($"{_localEmailArg} \"{value.Email}\"");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the global git user.
+        /// </summary>
+        internal User GlobalUser
+        {
+            get
+            {
+                return new User
+                {
+                    Name = Run(_globalNameArg),
+                    Email = Run(_globalEmailArg)
+                };
+            }
+            set
+            {
+                Run($"{_globalNameArg} \"{value.Name}\"");
+                Run($"{_globalEmailArg} \"{value.Email}\"");
+            }
+        }
+
+        /// <summary>
+        /// Gets the value indicating whether git is installed on the machine.
+        /// </summary>
+        internal bool IsInstalled
+        {
+            get
+            {
+                if (Run(_gitVersionArg).StartsWith("git version"))
+                    return true;
+                return false;
+            }
+        }
+
         /// <summary>
         /// Initializes the fields.
         /// </summary>
@@ -25,7 +88,7 @@ namespace gitswitch.Cli.Services
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
-            };  
+            };
         }
 
         /// <summary>
@@ -38,33 +101,14 @@ namespace gitswitch.Cli.Services
         }
 
         /// <summary>
-        /// Starts a git process with specified commands.
-        /// </summary>
-        /// <param name="args">The git commands and arguments.</param>
-        /// <returns>The command output.</returns>
-        internal string Start(string args = "")
-        {
-            _info.Arguments = args;
-            return StartGit();
-        }
-
-        /// <summary>
-        /// Starts a git process with specified commands.
-        /// </summary>
-        /// <param name="args">The git commands and arguments.</param>
-        /// <returns>The command output.</returns>
-        internal string Start(string[] args)
-        {
-            _info.Arguments = string.Join(' ', args);
-            return StartGit();
-        }
-
-        /// <summary>
         /// Starts the git process.
         /// </summary>
         /// <returns>The command output.</returns>
-        private string StartGit()
+        private string Run(string arguments = "")
         {
+            // Set arguments
+            _info.Arguments = arguments;
+
             var output = "";
             using (var process = new Process { StartInfo = _info })
             {
@@ -76,17 +120,6 @@ namespace gitswitch.Cli.Services
                     output += $"{process.StandardOutput.ReadLine()}\n";
             }
             return output.Trim();
-        }
-
-        /// <summary>
-        /// Checks if git is installed on the machine.
-        /// </summary>
-        /// <returns><see langword="true"/> if git is installed, else <see langword="false"/>.</returns>
-        internal bool IsExist()
-        {
-            if (Start("--version").StartsWith("git version"))
-                return true;
-            return false;
         }
     }
 }

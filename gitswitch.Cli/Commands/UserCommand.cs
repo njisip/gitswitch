@@ -65,10 +65,9 @@ namespace gitswitch.Cli.Commands
         /// </summary>
         private void ShowLocalUser()
         {
-            var name = _git.Start(Util.LocalNameArguments);
-            var email = _git.Start(Util.LocalEmailArguments);
+            var user = _git.LocalUser;
             Console.WriteLine("Local user");
-            Util.ShowUser(name, email);
+            Util.ShowUser(user.Name, user.Email);
         }
 
         /// <summary>
@@ -76,10 +75,9 @@ namespace gitswitch.Cli.Commands
         /// </summary>
         private void ShowGlobalUser()
         {
-            var name = _git.Start(Util.GlobalNameArguments);
-            var email = _git.Start(Util.GlobalEmailArguments);
+            var user = _git.GlobalUser;
             Console.WriteLine("Global user");
-            Util.ShowUser(name, email);
+            Util.ShowUser(user.Name, user.Email);
         }
 
         /// <summary>

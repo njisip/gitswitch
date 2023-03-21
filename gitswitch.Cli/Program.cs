@@ -32,7 +32,7 @@ namespace gitswitch.Cli
         static async Task<int> Main(string[] args)
         {
             // Check if git is installed
-            if (!_git.IsExist())
+            if (!_git.IsInstalled)
             {
                 Console.WriteLine("git is not installed on your system");
                 return 1;
