@@ -31,9 +31,9 @@ namespace gitswitch.Cli.Commands
             : base("add", "Add new user")
         {
             // Initialize arguments
-            _keyArg = new Argument<string>("--key", "The key used to identify the user");
-            _nameArg = new Argument<string>("--name", "The user name");
-            _emailArg = new Argument<string>("--email", "The user email");
+            _keyArg = new Argument<string>("key", "The key used to identify the user");
+            _nameArg = new Argument<string>("name", "The user name");
+            _emailArg = new Argument<string>("email", "The user email");
             AddArgument(_keyArg);
             AddArgument(_nameArg);
             AddArgument(_emailArg);
