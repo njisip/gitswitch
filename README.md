@@ -44,19 +44,19 @@ gitsw user -g
 ```sh
 gitsw user -a
 ```
-### Add user
+#### Add user
 ```sh
 gitsw user add "key" "name" "email"
 ```
-### Add user and set as local user
+#### Add user and set as local user
 ```sh
 gitsw user add "key" "name" "email" -s
 ```
-### Switch local user
+#### Switch local user
 ```sh
 gitsw user switch "key"
 ```
-### Switch global user
+#### Switch global user
 ```sh
 gitsw user switch "key" -g
 ```
