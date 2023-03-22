@@ -1,6 +1,11 @@
 # gitswitch
 A CLI tool to easily switch between users in a repository. It allows having a collection of user information and easily set them as local or global user using a key.
 
+## Requirements
+
+- [.NET 6.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) or above
+- [Git](https://git-scm.com/)
+
 ## Installation
 
 1. Download the [latest version](https://github.com/njisip/gitswitch/releases/latest) from [releases](https://github.com/njisip/gitswitch/releases).
