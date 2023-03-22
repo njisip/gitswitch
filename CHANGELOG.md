@@ -16,4 +16,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `user switch` command to switch local or global user to the specified user.
 
 [unreleased]: https://github.com/njisip/gitswitch/compare/v0.1.0...HEAD
-[v0.1.0]: https://github.com/njisip/gitswitch/releases/tag/v0.0.1
+[v0.1.0]: https://github.com/njisip/gitswitch/releases/tag/v0.1.0
