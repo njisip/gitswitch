@@ -1,9 +1,20 @@
-﻿using System.CommandLine;
+﻿using gitswitch.Cli.Services;
+using System.CommandLine;
 
 namespace gitswitch.Cli.Commands
 {
     internal class UserCommand : Command
     {
+        /// <summary>
+        /// The git service.
+        /// </summary>
+        private readonly GitService _git;
+
+        /// <summary>
+        /// The user service.
+        /// </summary>
+        private readonly UserService _userService;
+
         /// <summary>
         /// Flag to show global user information.
         /// </summary>
@@ -17,9 +28,12 @@ namespace gitswitch.Cli.Commands
         /// <summary>
         /// Creates a user command.
         /// </summary>
-        public UserCommand()
+        public UserCommand(GitService git, UserService userService)
             : base("user", "Show user information")
         {
+            _git = git;
+            _userService = userService;
+
             // Initialize options
             _globalOption = new Option<bool>("--global", "Show global user information");
             _globalOption.SetDefaultValue(false);
@@ -32,7 +46,7 @@ namespace gitswitch.Cli.Commands
             AddOption(_allUsersOption);
 
             // Initialize sub-commands
-            AddCommand(new AddUserCommand());
+            AddCommand(new AddUserCommand(_git, _userService));
 
             // Initialize handler
             this.SetHandler((isGlobal, isAllUsers) =>
@@ -57,10 +71,9 @@ namespace gitswitch.Cli.Commands
         /// </summary>
         private void ShowLocalUser()
         {
-            var name = Git.Start(Util.LocalNameArguments);
-            var email = Git.Start(Util.LocalEmailArguments);
+            var user = _git.LocalUser;
             Console.WriteLine("Local user");
-            Util.ShowUser(name, email);
+            _userService.ShowUser(user);
         }
 
         /// <summary>
@@ -68,10 +81,9 @@ namespace gitswitch.Cli.Commands
         /// </summary>
         private void ShowGlobalUser()
         {
-            var name = Git.Start(Util.GlobalNameArguments);
-            var email = Git.Start(Util.GlobalEmailArguments);
+            var user = _git.GlobalUser;
             Console.WriteLine("Global user");
-            Util.ShowUser(name, email);;
+            _userService.ShowUser(user);
         }
 
         /// <summary>
@@ -79,8 +91,8 @@ namespace gitswitch.Cli.Commands
         /// </summary>
         private void ShowAllUsers()
         {
-            foreach (var user in Program.Users?.Values!)
-                Util.ShowUser(user.Name, user.Email, user.Key);
-        }        
+            foreach (var user in _userService.Users.Values!)
+                _userService.ShowUser(user);
+        }
     }
 }

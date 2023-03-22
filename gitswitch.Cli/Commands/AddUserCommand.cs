@@ -1,9 +1,20 @@
-﻿using System.CommandLine;
+﻿using gitswitch.Cli.Services;
+using System.CommandLine;
 
 namespace gitswitch.Cli.Commands
 {
     internal class AddUserCommand : Command
     {
+        /// <summary>
+        /// The git service.
+        /// </summary>
+        private readonly GitService _git;
+
+        /// <summary>
+        /// The user service.
+        /// </summary>
+        private readonly UserService _userService;
+
         /// <summary>
         /// The key argument.
         /// </summary>
@@ -27,13 +38,16 @@ namespace gitswitch.Cli.Commands
         /// <summary>
         /// Creates a add user command.
         /// </summary>
-        public AddUserCommand()
+        public AddUserCommand(GitService git, UserService userService)
             : base("add", "Add new user")
         {
+            _git = git;
+            _userService = userService;
+
             // Initialize arguments
-            _keyArg = new Argument<string>("--key", "The key used to identify the user");
-            _nameArg = new Argument<string>("--name", "The user name");
-            _emailArg = new Argument<string>("--email", "The user email");
+            _keyArg = new Argument<string>("key", "The key used to identify the user");
+            _nameArg = new Argument<string>("name", "The user name");
+            _emailArg = new Argument<string>("email", "The user email");
             AddArgument(_keyArg);
             AddArgument(_nameArg);
             AddArgument(_emailArg);
@@ -46,23 +60,22 @@ namespace gitswitch.Cli.Commands
 
             this.SetHandler((key, name, email, isSwitch) =>
             {
-                // Check if key already exists
-                if (Program.Users!.ContainsKey(key))
+                var userToAdd = new User(key, name, email);
+
+                // Try to add user
+                if (!_userService.TryAddUser(userToAdd))
                 {
                     Console.WriteLine($"The key '{key}' already exists.");
                     return;
                 }
 
-                // Add and save user
-                Program.Users?.Add(key, new User(key, name, email));
-                Program.SaveUsers();
+                // Save users to file
+                _userService.SaveUsers();
                 Console.WriteLine($"User '{name} ({email})' has been added with key '{key}'");
 
+                // Check if needed to switch to the added user
                 if (isSwitch)
-                {
-                    Git.Start($"{Util.LocalNameArguments} \"{name}\"");
-                    Git.Start($"{Util.LocalEmailArguments} \"{email}\"");
-                }
+                    _git.LocalUser = userToAdd;
 
             }, _keyArg, _nameArg, _emailArg, _switchOption);
         }
