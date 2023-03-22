@@ -46,6 +46,11 @@ namespace gitswitch.Cli.Services
         /// </summary>
         internal void LoadUsers()
         {
+            // Create users file if it does not exist
+            if (!File.Exists(_usersPath))
+                File.WriteAllText(_usersPath, "{}");
+
+            // Load users file
             Users = JsonSerializer.Deserialize<Dictionary<string, User>>(File.ReadAllText(_usersPath)) ?? new();
         }
 
