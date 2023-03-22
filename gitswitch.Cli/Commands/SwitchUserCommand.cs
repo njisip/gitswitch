@@ -21,6 +21,11 @@ namespace gitswitch.Cli.Commands
         private Argument<string> _keyArg;
 
         /// <summary>
+        /// Flag to switch global user.
+        /// </summary>
+        private Option<bool> _globalOption;
+
+        /// <summary>
         /// Creates switch user command.
         /// </summary>
         public SwitchUserCommand(GitService git, UserService userService) 
@@ -33,23 +38,39 @@ namespace gitswitch.Cli.Commands
             _keyArg = new Argument<string>("key", "The key used to identify the user");
             AddArgument(_keyArg);
 
-            this.SetHandler((key) =>
+            // Initialize options
+            _globalOption = new Option<bool>("--global", "Switch global user");
+            _globalOption.SetDefaultValue(false);
+            _globalOption.AddAlias("-g");
+            AddOption(_globalOption);
+
+            this.SetHandler((key, isGlobal) =>
             {
                 // Get user from collection
                 var user = _userService.GetUser(key);
 
                 // Check if user exists
                 if (user is null)
-                    Console.WriteLine($"The user with key '{key}' does not exist.");
-                else
                 {
-                    // Switch user
-                    _git.LocalUser = user;
-                    Console.WriteLine("The local user was switched to:");
-                    _userService.ShowUser(user);
+                    Console.WriteLine($"The user with key '{key}' does not exist");
+                    return;
                 }
 
-            }, _keyArg);
+                if (!isGlobal)
+                {
+                    // Switch local user
+                    _git.LocalUser = user;
+                    Console.WriteLine("The local user was switched to:");                    
+                }
+                else
+                {
+                    // Switch global user
+                    _git.GlobalUser = user;
+                    Console.WriteLine("The global user was switched to:");
+                }
+                _userService.ShowUser(user);
+
+            }, _keyArg, _globalOption);
         }
     }
 }
