@@ -11,6 +11,11 @@ namespace gitswitch.Cli.Commands
         private readonly GitService _git;
 
         /// <summary>
+        /// The user service.
+        /// </summary>
+        private readonly UserService _userService;
+
+        /// <summary>
         /// The key argument.
         /// </summary>
         private Argument<string> _keyArg;
@@ -33,10 +38,11 @@ namespace gitswitch.Cli.Commands
         /// <summary>
         /// Creates a add user command.
         /// </summary>
-        public AddUserCommand(GitService git)
+        public AddUserCommand(GitService git, UserService userService)
             : base("add", "Add new user")
         {
             _git = git;
+            _userService = userService;
 
             // Initialize arguments
             _keyArg = new Argument<string>("key", "The key used to identify the user");
@@ -54,20 +60,22 @@ namespace gitswitch.Cli.Commands
 
             this.SetHandler((key, name, email, isSwitch) =>
             {
-                // Check if key already exists
-                if (Program.Users!.ContainsKey(key))
+                var userToAdd = new User(key, name, email);
+
+                // Try to add user
+                if (!_userService.TryAddUser(userToAdd))
                 {
                     Console.WriteLine($"The key '{key}' already exists.");
                     return;
                 }
 
-                // Add and save user
-                Program.Users?.Add(key, new User(key, name, email));
-                Program.SaveUsers();
+                // Save users to file
+                _userService.SaveUsers();
                 Console.WriteLine($"User '{name} ({email})' has been added with key '{key}'");
 
+                // Check if needed to switch to the added user
                 if (isSwitch)
-                    _git.LocalUser = new User(key, name, email);
+                    _git.LocalUser = userToAdd;
 
             }, _keyArg, _nameArg, _emailArg, _switchOption);
         }

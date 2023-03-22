@@ -1,28 +1,25 @@
 ﻿using gitswitch.Cli.Commands;
 using gitswitch.Cli.Services;
 using System.CommandLine;
-using System.Text.Json;
 
 namespace gitswitch.Cli
 {
     internal class Program
     {
-        private static string _usersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "users.json");
-
         /// <summary>
         /// The git service.
         /// </summary>
         private static readonly GitService _git = GitService.Create();
 
         /// <summary>
+        /// The user service.
+        /// </summary>
+        private static readonly UserService _userService = UserService.Create();
+
+        /// <summary>
         /// The root command: gitsw.
         /// </summary>
         private static RootCommand? _rootCommand;
-
-        /// <summary>
-        /// Gets the collection of users.
-        /// </summary>
-        internal static Dictionary<string, User>? Users { get; private set; }
 
         /// <summary>
         /// The starting point of the application.
@@ -39,14 +36,13 @@ namespace gitswitch.Cli
             }
 
             // Load users
-            var json = File.ReadAllText(_usersPath);
-            Users = JsonSerializer.Deserialize<Dictionary<string, User>>(json)!;
+            _userService.LoadUsers();
 
             // Create root commnand
             _rootCommand = new RootCommand("A tool to easily switch between users in a repository");
 
             // Add commands
-            _rootCommand.AddCommand(new UserCommand(_git));
+            _rootCommand.AddCommand(new UserCommand(_git, _userService));
 
             // Show help if no commands or arguments given
             if (args == null || !args.Any())
@@ -54,20 +50,6 @@ namespace gitswitch.Cli
 
             // Pass arguments
             return await _rootCommand.InvokeAsync(args);
-        }
-
-        /// <summary>
-        /// Saves the users collection to a file.
-        /// </summary>
-        internal static void SaveUsers()
-        {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true
-            };
-
-            var json = JsonSerializer.Serialize(Users, options);
-            File.WriteAllText(_usersPath, json);
         }
     }
 }
