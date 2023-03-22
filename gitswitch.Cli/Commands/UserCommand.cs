@@ -92,6 +92,14 @@ namespace gitswitch.Cli.Commands
         /// </summary>
         private void ShowAllUsers()
         {
+            // Check if there are users
+            if (!_userService.Users.Values.Any())
+            {
+                Console.WriteLine("There are no users.");
+                return;
+            }
+
+            // Show users
             foreach (var user in _userService.Users.Values!)
                 _userService.ShowUser(user);
         }
