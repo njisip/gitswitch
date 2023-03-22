@@ -47,6 +47,7 @@ namespace gitswitch.Cli.Commands
 
             // Initialize sub-commands
             AddCommand(new AddUserCommand(_git, _userService));
+            AddCommand(new SwitchUserCommand(_git, _userService));
 
             // Initialize handler
             this.SetHandler((isGlobal, isAllUsers) =>
