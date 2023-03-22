@@ -78,6 +78,18 @@ namespace gitswitch.Cli.Services
         }
 
         /// <summary>
+        /// Gets the user specified by the key.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <returns>The specified user, else <see langword="null"/>.</returns>
+        internal User? GetUser(string key)
+        {
+            if (Users.TryGetValue(key, out User? user))
+                return user;
+            return null;
+        }
+
+        /// <summary>
         /// Shows a user information.
         /// </summary>
         /// <param name="user">The user.</param>
