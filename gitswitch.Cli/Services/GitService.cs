@@ -21,6 +21,7 @@ namespace gitswitch.Cli.Services
         private readonly string _localEmailArg = "config user.email";
         private readonly string _globalNameArg = "config --global user.name";
         private readonly string _globalEmailArg = "config --global user.email";
+        private readonly string _gitInitArg = "init";
 
         #endregion
 
@@ -120,6 +121,14 @@ namespace gitswitch.Cli.Services
                     output += $"{process.StandardOutput.ReadLine()}\n";
             }
             return output.Trim();
+        }
+
+        /// <summary>
+        /// Initializes a git repository.
+        /// </summary>
+        internal string InitializeRepository()
+        {
+            return Run(_gitInitArg);
         }
     }
 }
