@@ -54,7 +54,7 @@ namespace gitswitch.Cli.Commands
 
                     // Set user
                     _git.LocalUser = user;
-                    Console.WriteLine($"with user '{user.Name} ({user.Email})'");
+                    Console.WriteLine($"Set with user '{user.Name} ({user.Email})'");
                 }
                 else
                     Console.WriteLine($"The user with key '{key}' does not exist");
