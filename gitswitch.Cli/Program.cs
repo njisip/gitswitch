@@ -44,7 +44,6 @@ namespace gitswitch.Cli
             // Add commands
             _rootCommand.AddCommand(new UserCommand(_git, _userService));
             _rootCommand.AddCommand(new InitializeRepositoryCommand(_git, _userService));
-            _rootCommand.AddCommand(new CloneRepositoryCommand(_git, _userService));
 
             // Show help if no commands or arguments given
             if (args == null || !args.Any())
