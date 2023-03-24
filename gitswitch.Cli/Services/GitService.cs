@@ -22,6 +22,7 @@ namespace gitswitch.Cli.Services
         private readonly string _globalNameArg = "config --global user.name";
         private readonly string _globalEmailArg = "config --global user.email";
         private readonly string _gitInitArg = "init";
+        private readonly string _gitCloneArg = "clone";
 
         #endregion
 
@@ -88,6 +89,7 @@ namespace gitswitch.Cli.Services
                 FileName = "git",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 CreateNoWindow = true
             };
         }
@@ -129,6 +131,16 @@ namespace gitswitch.Cli.Services
         internal string InitializeRepository()
         {
             return Run(_gitInitArg);
+        }
+
+        /// <summary>
+        /// Clones a repository.
+        /// </summary>
+        /// <param name="repo">The repository url.</param>        
+        /// <returns>The command output.</returns>
+        internal string CloneRepository(string repo)
+        {
+            return Run($"{_gitCloneArg} \"{repo}\"");
         }
     }
 }
