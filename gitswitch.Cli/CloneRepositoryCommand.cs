@@ -41,7 +41,7 @@ namespace gitswitch.Cli
                     return;
                 }
 
-                Console.WriteLine(_git.CloneRepository(repo));
+                _git.CloneRepository(repo);
 
             }, _repoArg);
         }

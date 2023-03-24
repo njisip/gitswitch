@@ -14,6 +14,16 @@ namespace gitswitch.Cli.Services
         /// </summary>
         private ProcessStartInfo _info;
 
+        /// <summary>
+        /// The command output.
+        /// </summary>
+        private string _output = "";
+
+        /// <summary>
+        /// The vlaue indicating whether to print the output to console.
+        /// </summary>
+        private bool _printOutput = false;
+
         #region Git command arguments
 
         private readonly string _gitVersionArg = "--version";
@@ -106,23 +116,30 @@ namespace gitswitch.Cli.Services
         /// <summary>
         /// Starts the git process.
         /// </summary>
+        /// <param name="arguments">The command arguments.</param>
+        /// <param name="doPrint">The value indicating whether to print command output to console.</param>
         /// <returns>The command output.</returns>
-        private string Run(string arguments = "")
+        private string Run(string arguments = "", bool doPrint = false)
         {
             // Set arguments
             _info.Arguments = arguments;
-
-            var output = "";
+            _output = "";
+            _printOutput = doPrint;
             using (var process = new Process { StartInfo = _info })
             {
+                process.OutputDataReceived += DataReceivedHandler;
+                process.ErrorDataReceived += DataReceivedHandler;
+
                 // Start the process
                 process.Start();
+                process.BeginErrorReadLine();
+                process.BeginOutputReadLine();
+                process.WaitForExit();
 
-                // Compile the output
-                while (!process.StandardOutput.EndOfStream)
-                    output += $"{process.StandardOutput.ReadLine()}\n";
+                process.OutputDataReceived -= DataReceivedHandler;
+                process.ErrorDataReceived -= DataReceivedHandler;
             }
-            return output.Trim();
+            return _output.Trim();
         }
 
         /// <summary>
@@ -140,7 +157,23 @@ namespace gitswitch.Cli.Services
         /// <returns>The command output.</returns>
         internal string CloneRepository(string repo)
         {
-            return Run($"{_gitCloneArg} \"{repo}\"");
+            return Run($"{_gitCloneArg} \"{repo}\"", true);
+        }
+
+        /// <summary>
+        /// Handles data received by the standard output and error.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataReceivedHandler(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data is not null)
+            {
+                _output += $"{e.Data}\n";
+
+                if (_printOutput)
+                    Console.WriteLine(e.Data);
+            }
         }
     }
 }
